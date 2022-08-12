@@ -1,9 +1,9 @@
 import type { NextPage } from "next";
-import Image from "next/image";
+import { Layout } from "../components";
 
-const Home: NextPage = () => {
+const HomePage: NextPage = () => {
   return (
-    <>
+    <Layout>
       <div className="hero-overlay bg-opacity-60"></div>
       <div className="text-center capitalize hero-content text-neutral-content">
         <div className="max-w-md">
@@ -14,8 +14,8 @@ const Home: NextPage = () => {
           <button className="btn btn-primary">Get test Ethereum</button>
         </div>
       </div>
-    </>
+    </Layout>
   );
 };
 
-export default Home;
+export default HomePage;

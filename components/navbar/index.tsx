@@ -1,8 +1,9 @@
 import { FunctionComponent } from "react";
+import Link from "next/link";
 
 const Navbar: FunctionComponent = () => {
   return (
-    <div className="bg-transparent navbar">
+    <div className="navbar bg-base-100">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost btn-circle">
@@ -26,22 +27,24 @@ const Navbar: FunctionComponent = () => {
             className="p-2 mt-3 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
           >
             <li>
-              <a>Homepage</a>
+              <Link href={"/items/create"}>Create</Link>
             </li>
             <li>
-              <a>Portfolio</a>
+              <Link href={"/profile"}>Profile</Link>
             </li>
             <li>
-              <a>About</a>
+              <Link href={"/about"}>About</Link>
             </li>
           </ul>
         </div>
       </div>
-      <div className="navbar-center">
-        <a className="text-xl capitalize btn btn-ghost">eth-marketplace</a>
+      <div className="navbar-center btn btn-ghost">
+        <Link href={"/"} className="text-xl capitalize">
+          eth-marketplace
+        </Link>
       </div>
       <div className="navbar-end">
-        <button className="btn btn-ghost btn-circle">
+        {/* <button className="btn btn-ghost btn-circle">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="w-5 h-5"
@@ -56,7 +59,7 @@ const Navbar: FunctionComponent = () => {
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
             />
           </svg>
-        </button>
+        </button> */}
         <button className="btn btn-ghost btn-circle">
           <div className="indicator">
             <svg

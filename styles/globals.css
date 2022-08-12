@@ -10,4 +10,8 @@
   .clip-bg-right {
     clip-path: polygon(0 0, 100% 0, 0% 100%, 0 100%);
   }
+
+  .clip-line {
+    clip-path: polygon(0 0, 60% 0, 0% 100%, 0 100%);
+  }
 }

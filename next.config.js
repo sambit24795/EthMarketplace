@@ -4,7 +4,7 @@ const nextConfig = {
   swcMinify: true,
   images: {
     minimumCacheTTL: 60,
-    domains: ["placeimg.com", "eincode.mypinata.cloud"],
+    domains: ["placeimg.com", "eincode.mypinata.cloud", "images.unsplash.com"],
   },
 };
 
