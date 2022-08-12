@@ -2,6 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-}
+  images: {
+    minimumCacheTTL: 60,
+    domains: ["placeimg.com", "eincode.mypinata.cloud"],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
