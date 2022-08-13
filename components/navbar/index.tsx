@@ -1,7 +1,12 @@
 import { FunctionComponent } from "react";
 import Link from "next/link";
+import { useAccount } from "../../hooks/index";
 
 const Navbar: FunctionComponent = () => {
+  const { account } = useAccount();
+
+  console.log({ account });
+
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">

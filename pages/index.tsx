@@ -1,7 +1,12 @@
 import type { NextPage } from "next";
 import { Layout } from "../components";
+import { useWeb3 } from "../providers/web3";
 
 const HomePage: NextPage = () => {
+  const { isLoading, provider, contract } = useWeb3();
+
+  console.log({ provider, contract });
+
   return (
     <Layout>
       <div className="hero-overlay bg-opacity-60"></div>
