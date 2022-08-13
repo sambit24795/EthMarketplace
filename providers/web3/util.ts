@@ -1,7 +1,7 @@
 import { providers, Contract, ethers } from "ethers";
 import { Web3State } from "../../types/web3";
 import { setupHooks } from "../../hooks/web3/setupHooks";
-import { Web3Dependancies } from '../../types/hooks';
+import { Web3Dependancies } from "../../types/hooks";
 
 const NETWORK_ID = process.env.NEXT_PUBLIC_NETWORK_ID;
 
@@ -11,7 +11,7 @@ export const createDefaultState = () => {
     ethereum: null,
     provider: null,
     contract: null,
-    hooks: setupHooks({} as any),
+    hooks: setupHooks({ isLoading: true } as any),
   };
 };
 
@@ -20,13 +20,13 @@ export const createWeb3State = ({
   provider,
   contract,
   isLoading,
-}: Web3Dependancies & { isLoading: boolean }): Web3State => {
+}: Web3Dependancies): Web3State => {
   return {
     isLoading,
     ethereum,
     provider,
     contract,
-    hooks: setupHooks({ ethereum, provider, contract }),
+    hooks: setupHooks({ ethereum, provider, contract, isLoading }),
   };
 };
 

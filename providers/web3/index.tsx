@@ -10,31 +10,64 @@ import { ethers } from "ethers";
 
 import { Web3State } from "../../types/web3";
 import { createDefaultState, loadContract, createWeb3State } from "./util";
-import { setupHooks } from "../../hooks/web3/setupHooks";
+import { MetaMaskInpageProvider } from "@metamask/providers";
 
 const Web3Context = createContext<Web3State>(createDefaultState());
+
+const pageReload = () => {
+  window.location.reload();
+};
+
+const handleAccount = (ethereum: MetaMaskInpageProvider) => async () => {
+  const isLocked = !(await ethereum._metamask.isUnlocked());
+
+  if (isLocked) {
+    pageReload();
+  }
+};
+
+const setGlobalListeners = (ethereum: MetaMaskInpageProvider) => {
+  ethereum.on("chainChanged", pageReload);
+  ethereum.on("accountsChanged", handleAccount(ethereum));
+};
+
+const removeGlobalListener = (ethereum: MetaMaskInpageProvider) => {
+  ethereum.removeListener("chainChanged", pageReload);
+  ethereum.removeListener("accountsChanged", handleAccount(ethereum));
+};
 
 const Web3Provider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const [web3Api, setWeb3Api] = useState<Web3State>(createDefaultState());
 
   useEffect(() => {
     const initWeb = async () => {
-      const provider = new ethers.providers.Web3Provider(
-        window.ethereum as any
-      );
-      const contract = await loadContract("EthMarket", provider);
+      try {
+        const provider = new ethers.providers.Web3Provider(
+          window.ethereum as any
+        );
+        const contract = await loadContract("EthMarket", provider);
 
-      setWeb3Api(
-        createWeb3State({
-          ethereum: window.ethereum,
-          provider,
-          contract,
-          isLoading: false,
-        })
-      );
+        setGlobalListeners(window.ethereum);
+        setWeb3Api(
+          createWeb3State({
+            ethereum: window.ethereum,
+            provider,
+            contract,
+            isLoading: false,
+          })
+        );
+      } catch (error) {
+        console.error(error);
+        setWeb3Api((prevState) =>
+          createWeb3State({ ...(prevState as any), isLoading: false })
+        );
+      }
     };
 
     initWeb();
+    return () => {
+      removeGlobalListener(window.ethereum);
+    };
   }, []);
 
   return (

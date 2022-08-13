@@ -17,7 +17,7 @@ const HeroContent = () => {
           create item
         </div>
       </div>
-      <div className="shadow stats">
+      <div className="overflow-hidden shadow stats">
         <div className="shadow stat">
           <div className="capitalize stat-title">value in eth</div>
           <div className="stat-value text-secondary">1&eth;</div>

@@ -6,14 +6,13 @@ export interface Web3Dependancies {
   provider: providers.Web3Provider;
   contract: Contract;
   ethereum: MetaMaskInpageProvider;
+  isLoading: boolean;
 }
 
-export type CryptoSWRResponse<D = any> = SWRResponse<D>;
+export type CryptoSWRResponse<D = any, R = any> = SWRResponse<D> & R;
 
-export type CryptoHandlerHook<D = any, P = any> = (
-  params: P
-) => CryptoSWRResponse<D>;
+export type CryptoHandlerHook<D = any, R = any> = () => CryptoSWRResponse<D, R>;
 
-export interface CryptoHookFactory<D = any, P = any> {
-  (deps: Partial<Web3Dependancies>): CryptoHandlerHook<D, P>;
+export interface CryptoHookFactory<D = any, R = any> {
+  (deps: Partial<Web3Dependancies>): CryptoHandlerHook<D, R>;
 }
