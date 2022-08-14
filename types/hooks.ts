@@ -1,10 +1,11 @@
 import { MetaMaskInpageProvider } from "@metamask/providers";
-import { providers, Contract } from "ethers";
+import { providers } from "ethers";
 import { SWRResponse } from "swr";
+import { EthMarketContract } from "./ethMarketContract";
 
 export interface Web3Dependancies {
   provider: providers.Web3Provider;
-  contract: Contract;
+  contract: EthMarketContract;
   ethereum: MetaMaskInpageProvider;
   isLoading: boolean;
 }

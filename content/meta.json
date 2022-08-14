@@ -2,7 +2,7 @@
   {
     "id": "item_1",
     "description": "Creative Technology Color Explosion Burst In Laptop Notebook Computer.",
-    "image": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1168&q=80",
+    "image": "https://gateway.pinata.cloud/ipfs/QmPgqgNWnktot5AjA3PEhaBiehAN7LvnnPQjMUYEFeFz77",
     "name": "Laptop",
     "rupee_price": 71000,
     "eth_price": 0.0000000087,
@@ -10,8 +10,8 @@
   },
   {
     "id": "item_2",
-    "description": "Creative Technology Color Explosion Burst In Laptop Notebook Computer.",
-    "image": "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80",
+    "description": "Experience the modernized design of the Xbox Wireless Controller.",
+    "image": "https://gateway.pinata.cloud/ipfs/QmVYvsg7HdStt2QuDn4nv5apsb3kSf1V2Li5ZgcaSKXwCE",
     "name": "Xbox controller",
     "rupee_price": 3000,
     "eth_price": 0.00000000000000089,
@@ -19,8 +19,8 @@
   },
   {
     "id": "item_3",
-    "description": "Creative Technology Color Explosion Burst In Laptop Notebook Computer.",
-    "image": "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1265&q=80",
+    "description": "Storm the digital battlefield with this power packed gaming keybord.",
+    "image": "https://gateway.pinata.cloud/ipfs/QmbsYJSFZ4mgPej7j7w27qqDdoZYYfJcfANcqhTiPnzNHU",
     "name": "Keyboard",
     "rupee_price": 5000,
     "eth_price": 0.0000000000000087,

@@ -124,4 +124,54 @@ contract("EthMarket", (accounts) => {
       assert.equal(owneditems.length, 2, "invalid lenght of tokens");
     });
   });
+
+  describe("List an Item", async () => {
+    before(async () => {
+      await _contract.placeItemOnSale(1, _price, {
+        from: accounts[1],
+        value: _listingPrice,
+      });
+    });
+
+    it("should have two listed items", async () => {
+      const listedItems = await _contract.getAllItemsOnSale({
+        from: accounts[0],
+      });
+      assert.equal(listedItems.length, 2, "invalid length of items");
+    });
+
+    it("should change the item price", async () => {
+      await _contract.setListingPrice(_listingPrice, {
+        from: accounts[0],
+      });
+      const listingPrice = await _contract.listingPrice();
+
+      assert.equal(
+        listingPrice.toString(),
+        _listingPrice,
+        "invalid listingPrice"
+      );
+    });
+  });
 });
+
+/* describe("Burn token", async () => {
+    before(async () => {
+      const tokenURI = "https://test3.com";
+      await _contract.mintToken(tokenURI, _price, {
+        from: accounts[2],
+        value: _listingPrice,
+      });
+
+      it("account[2] should have some owned Items", async () => {
+        const ownedItems = await _contract.getOwnedItems({ from: accounts[2] });
+        assert.equal(ownedItems[0].tokenId, 3, "item has wrong id");
+      });
+
+      it("account[2] should have some owned o items", async () => {
+        await _contract.burnToken(3, { from: accounts[2] });
+        const ownedItems = await _contract.getOwnedItems({ from: accounts[2] });
+        assert.equal(ownedItems.length, 0, "item has invalid length");
+      });
+    });
+  }); */

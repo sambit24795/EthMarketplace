@@ -3,8 +3,9 @@ pragma solidity >=0.4.22 <0.9.0;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract EthMarket is ERC721URIStorage {
+contract EthMarket is ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private _listedItems;
     Counters.Counter private _tokenIds;
@@ -34,6 +35,12 @@ contract EthMarket is ERC721URIStorage {
     );
 
     constructor() ERC721("EthItems", "EITM") {}
+
+    function setListingPrice(uint256 newPrice) external onlyOwner {
+        require(newPrice > 0, "price must be valid");
+
+        listingPrice = newPrice;
+    }
 
     function mintToken(string memory tokenURI, uint256 price)
         public
@@ -154,9 +161,34 @@ contract EthMarket is ERC721URIStorage {
             _removeTokenFromOwnerEnumeration(from, tokenId);
         }
 
+        if (to == address(0)) {
+            _removeTokenFromAllTokensEnumeration(tokenId);
+        } else if (to != from) {
+            _addTokenToOwnerEnumeration(to, tokenId);
+        }
+
         if (to != from) {
             _addTokenToOwnerEnumeration(to, tokenId);
         }
+    }
+
+    function placeItemOnSale(uint256 tokenId, uint256 newPrice) public payable {
+        require(
+            ERC721.ownerOf(tokenId) == msg.sender,
+            "you are not owner of the item"
+        );
+        require(
+            _idToItem[tokenId].isListed == false,
+            "item is already on sale"
+        );
+        require(
+            msg.value == listingPrice,
+            "price must be equal to listing price"
+        );
+
+        _idToItem[tokenId].isListed = true;
+        _listedItems.increment();
+        _idToItem[tokenId].price = newPrice;
     }
 
     function _addTokenToAllTokensEnumeration(uint256 tokenId) private {
@@ -185,5 +217,17 @@ contract EthMarket is ERC721URIStorage {
 
         delete _idToOwnedItemIdx[tokenId];
         delete _ownedTokens[from][lastTokenIdx];
+    }
+
+    function _removeTokenFromAllTokensEnumeration(uint256 tokenId) private {
+        uint256 lastTokenIdx = _allitems.length - 1;
+        uint256 tokenIdx = _idToItemIdx[tokenId];
+        uint256 lastTokenId = _allitems[lastTokenIdx];
+
+        _allitems[tokenIdx] = lastTokenId;
+        _idToItemIdx[lastTokenIdx] = tokenIdx;
+
+        delete _idToItemIdx[tokenId];
+        _allitems.pop();
     }
 }

@@ -11,6 +11,7 @@ import { ethers } from "ethers";
 import { Web3State } from "../../types/web3";
 import { createDefaultState, loadContract, createWeb3State } from "./util";
 import { MetaMaskInpageProvider } from "@metamask/providers";
+import { EthMarketContract } from "../../types/ethMarketContract";
 
 const Web3Context = createContext<Web3State>(createDefaultState());
 
@@ -47,12 +48,15 @@ const Web3Provider: FunctionComponent<PropsWithChildren> = ({ children }) => {
         );
         const contract = await loadContract("EthMarket", provider);
 
+        const signer = provider.getSigner();
+        const signedContract = contract.connect(signer);
+
         setGlobalListeners(window.ethereum);
         setWeb3Api(
           createWeb3State({
             ethereum: window.ethereum,
             provider,
-            contract,
+            contract: signedContract as unknown as EthMarketContract,
             isLoading: false,
           })
         );

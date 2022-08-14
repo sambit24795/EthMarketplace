@@ -15,3 +15,11 @@ export const useNetwork = () => {
     network: swrRes,
   };
 };
+
+export const useListeditems = () => {
+  const hooks = useHooks();
+  const swrRes = hooks.useListedItems();
+  return {
+    itemData: swrRes,
+  };
+};

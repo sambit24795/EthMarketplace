@@ -1,9 +1,10 @@
 import type { NextPage } from "next";
 import { Navbar, Footer, CardList } from "../../components";
-
-import items from "../../content/meta.json";
+import { useListeditems } from "../../hooks/index";
 
 const ItemsPage: NextPage = () => {
+  const { itemData } = useListeditems();
+
   return (
     <div className="min-h-screen grid grid-rows-[auto_repeat(3, 1fr)_auto] auto-cols-auto">
       <Navbar />
@@ -11,7 +12,7 @@ const ItemsPage: NextPage = () => {
         All Items
       </div>
       <div className="grid overflow-hidden py-14 gap-y-10 sm:grid-cols-1 md:grid-cols-3 justify-items-center auto-rows-auto">
-        <CardList items={items} />
+        <CardList items={itemData.data || []} />
       </div>
       <Footer />
     </div>
