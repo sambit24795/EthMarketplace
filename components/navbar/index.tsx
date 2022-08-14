@@ -9,8 +9,6 @@ const Navbar: FunctionComponent = () => {
 
   const { network } = useNetwork();
 
-  console.log({ network });
-
   const connectHandler = () => {
     if (isInstalled) {
       connect();
@@ -138,17 +136,19 @@ const Navbar: FunctionComponent = () => {
                 onClick={() => copyToClipboard(accountData?.address as string)}
               >
                 <div className="shadow stat">
-                  <div className="stat-title">copy account</div>
+                  <div className="stat-title">account</div>
                   <div className="text-xs stat-value">
                     {shortenAccount(accountData?.address as string)}
                   </div>
+                  <div className="stat-desc">copy to clipboard</div>
                 </div>
               </li>
 
               <li onClick={() => copyToClipboard(network.data as string)}>
                 <div className="shadow stat">
-                  <div className="stat-title">copy Network</div>
+                  <div className="stat-title">Network</div>
                   <div className="text-xs stat-value">{network.data}</div>
+                  <div className="stat-desc">copy to clipboard</div>
                 </div>
               </li>
 
@@ -156,10 +156,11 @@ const Navbar: FunctionComponent = () => {
                 onClick={() => copyToClipboard(accountData?.balance as string)}
               >
                 <div className="shadow stat">
-                  <div className="stat-title">copy Balance</div>
-                  <div className="text-xs stat-value">
-                    {accountData?.balance}
+                  <div className="stat-title">Balance</div>
+                  <div className="text-xs uppercase stat-value">
+                    {accountData?.balance} eth
                   </div>
+                  <div className="stat-desc">copy to clipboard</div>
                 </div>
               </li>
             </ul>
