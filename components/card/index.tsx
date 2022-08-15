@@ -1,12 +1,33 @@
 import Image from "next/image";
 import { FunctionComponent } from "react";
 import { Item } from "../../types/Item";
+import { useAccount, useListeditems, useOwneditems } from "../../hooks/index";
 
 interface CardProps {
   item: Item;
 }
 
 const Card: FunctionComponent<CardProps> = ({ item }) => {
+  const {
+    itemData: { buyItem },
+  } = useListeditems();
+  const {
+    ownedData: { listItems },
+  } = useOwneditems();
+  const {
+    account: { data },
+  } = useAccount();
+
+  const isItemOwnedByCreator = data?.address === item?.owner;
+
+  const actionHandler = async () => {
+    if (isItemOwnedByCreator) {
+      await listItems(item.tokenId, item.price);
+    } else {
+      await buyItem(item.tokenId, item.price);
+    }
+  };
+
   return (
     <div className="transition shadow-xl card w-96 bg-base-100">
       <figure className="px-10 pt-10">
@@ -24,14 +45,16 @@ const Card: FunctionComponent<CardProps> = ({ item }) => {
         <div className="shadow stats">
           <div className="stat">
             <div className="capitalize stat-title">Price</div>
-            <div className="stat-value">{item.meta.rupee_price} &#x20b9;</div>
-            <div className="stat-desc">{item.meta.eth_price} &#240;</div>
+            <div className="uppercase stat-value">{item.price} eth</div>
+            <div className="stat-desc">{item.meta.rupee_price} &#x20b9;</div>
           </div>
         </div>
         <h2 className="card-title">{item.meta.name}</h2>
         <p>{item.meta.description}</p>
-        <div className="card-actions">
-          <button className="btn btn-primary">Preview</button>
+        <div className="py-1 card-actions">
+          <button className="btn btn-primary" onClick={actionHandler}>
+            {isItemOwnedByCreator ? "Sale Item" : "Buy Item"}
+          </button>
         </div>
       </div>
     </div>

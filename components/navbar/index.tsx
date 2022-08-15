@@ -158,7 +158,7 @@ const Navbar: FunctionComponent = () => {
                 <div className="shadow stat">
                   <div className="stat-title">Balance</div>
                   <div className="text-xs uppercase stat-value">
-                    {accountData?.balance} eth
+                    {Number(accountData?.balance).toFixed(2)} eth
                   </div>
                   <div className="stat-desc">copy to clipboard</div>
                 </div>

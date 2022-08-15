@@ -1,9 +1,48 @@
 import type { NextPage } from "next";
 import { useState } from "react";
+import axios from "axios";
 import { Navbar, Footer } from "../../../components";
+import { Item } from "../../../types/Item";
+import { useWeb3 } from "../../../providers/web3/index";
 
 const CreateItemPage: NextPage = () => {
   const [checked, setChecked] = useState<boolean>(false);
+  const [name, setName] = useState<Item["meta"]["name"]>("");
+  const [description, setDescription] =
+    useState<Item["meta"]["description"]>("");
+  const [image, setImage] = useState<Item["meta"]["image"]>("");
+  const [price, setPrice] = useState<Item["meta"]["eth_price"]>();
+
+  const { ethereum } = useWeb3();
+
+  const createItem = async () => {
+    try {
+      const messageToSign = await axios.get("/api/verify");
+      const accounts = (await ethereum?.request({
+        method: "eth_requestAccounts",
+      })) as Array<string>;
+      const account = accounts[0];
+      const signedData = await ethereum?.request({
+        method: "personal_sign",
+        params: [JSON.stringify(messageToSign.data), account, messageToSign.data.id],
+      });
+
+      await axios.post("/api/verify", {
+        address: account,
+        signature: signedData,
+        item: {
+          name,
+          description,
+          image,
+          price,
+        },
+      });
+
+      console.log({ signedData });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="min-h-screen grid grid-rows-[auto_repeat(3, 1fr)_auto] auto-cols-auto">
@@ -47,6 +86,8 @@ const CreateItemPage: NextPage = () => {
                     type="text"
                     placeholder="name"
                     className="input input-primary"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                   />
                 </div>
                 <div className="form-control">
@@ -56,7 +97,10 @@ const CreateItemPage: NextPage = () => {
                   <textarea
                     className="textarea textarea-primary"
                     placeholder="description"
-                    rows={4}
+                    rows={3}
+                    maxLength={50}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                   ></textarea>
                 </div>
                 <div className="form-control">
@@ -112,10 +156,19 @@ const CreateItemPage: NextPage = () => {
                 type="text"
                 placeholder="price in eth"
                 className="input input-primary"
+                value={price}
+                onChange={(e) => {
+                  if (isNaN(+e.target.value)) {
+                    return;
+                  }
+                  setPrice(+e.target.value);
+                }}
               />
             </div>
             <div className="mt-6 form-control">
-              <button className="btn btn-primary">Create</button>
+              <button className="btn btn-primary" onClick={createItem}>
+                Create
+              </button>
             </div>
           </div>
         </div>

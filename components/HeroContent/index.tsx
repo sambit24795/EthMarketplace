@@ -20,13 +20,13 @@ const HeroContent = () => {
       <div className="overflow-hidden shadow stats">
         <div className="shadow stat">
           <div className="capitalize stat-title">value in eth</div>
-          <div className="stat-value text-secondary">1&eth;</div>
+          <div className="stat-value text-secondary">1 ETH</div>
         </div>
 
         <div className="shadow stat">
           <div className="capitalize stat-title">value in rupees</div>
           <div className="stat-value text-secondary-focus">
-            149768.47&#8377;
+            149768.47 &#8377;
           </div>
         </div>
       </div>

@@ -104,7 +104,7 @@ contract EthMarket is ERC721URIStorage, Ownable {
     }
 
     function getAllItemsOnSale() public view returns (Item[] memory) {
-        uint256 allItemsCount = totalSupply();
+        uint256 allItemsCount = totalSupply(); 
         uint256 currentIndex = 0;
         Item[] memory items = new Item[](_listedItems.current());
 
@@ -166,10 +166,10 @@ contract EthMarket is ERC721URIStorage, Ownable {
         } else if (to != from) {
             _addTokenToOwnerEnumeration(to, tokenId);
         }
+    }
 
-        if (to != from) {
-            _addTokenToOwnerEnumeration(to, tokenId);
-        }
+    function burnToken(uint256 tokenId) public {
+        _burn(tokenId);
     }
 
     function placeItemOnSale(uint256 tokenId, uint256 newPrice) public payable {
@@ -211,7 +211,7 @@ contract EthMarket is ERC721URIStorage, Ownable {
 
         if (tokenIdx != lastTokenIdx) {
             uint256 lastTokenId = _ownedTokens[from][lastTokenIdx];
-            _ownedTokens[from][tokenIdx] = lastTokenIdx;
+            _ownedTokens[from][tokenIdx] = lastTokenId;
             _idToOwnedItemIdx[lastTokenId] = tokenIdx;
         }
 

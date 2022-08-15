@@ -1,10 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import type { NextPage } from "next";
 import { Navbar, Footer, CardList } from "../../components";
-import { useListeditems } from "../../hooks/index";
+import { useOwneditems } from "../../hooks/index";
 
 const ProfilePage: NextPage = () => {
-  const { itemData } = useListeditems();
+  const { ownedData } = useOwneditems();
 
   return (
     <div className="min-h-screen grid grid-rows-[auto_repeat(3, 1fr)_auto] auto-cols-auto">
@@ -13,7 +13,7 @@ const ProfilePage: NextPage = () => {
         My Items
       </div>
       <div className="grid overflow-hidden py-14 gap-y-10 sm:grid-cols-1 md:grid-cols-3 justify-items-center auto-rows-auto">
-        <CardList items={itemData?.data || []} />
+        <CardList items={ownedData?.data || []} />
       </div>
       <Footer />
     </div>

@@ -23,3 +23,11 @@ export const useListeditems = () => {
     itemData: swrRes,
   };
 };
+
+export const useOwneditems = () => {
+  const hooks = useHooks();
+  const swrRes = hooks.useOwnedItems();
+  return {
+    ownedData: swrRes,
+  };
+};

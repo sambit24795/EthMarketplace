@@ -1,5 +1,4 @@
 export interface ItemMeta {
-  id: string;
   description: string;
   image: string;
   name: string;
@@ -17,4 +16,5 @@ export interface ItemCore {
 
 export interface Item extends ItemCore {
   meta: ItemMeta;
+  owner: string;
 }
