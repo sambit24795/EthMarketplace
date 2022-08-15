@@ -26,7 +26,12 @@ export const hookFactory: OwnedItemsHookFactory =
           const tokenURI = await contract!.tokenURI(item.tokenId);
           const owner = await contract!.ownerOf(item.tokenId);
           const metaRes = await fetch(tokenURI);
-          const meta = await metaRes.json();
+          const itemData = await metaRes.json();
+          const meta = {
+            ...itemData,
+            rupee_price: itemData.rPrice,
+            eth_price: itemData.price,
+          };
 
           items.push({
             price: parseFloat(ethers.utils.formatEther(item.price)),
@@ -34,7 +39,7 @@ export const hookFactory: OwnedItemsHookFactory =
             creator: item.creator,
             isListed: item.isListed,
             meta,
-            owner
+            owner,
           });
         }
 
@@ -43,23 +48,26 @@ export const hookFactory: OwnedItemsHookFactory =
     );
 
     const _contract = contract;
-    const listItems = useCallback(async (tokenId: number, price: number) => {
-      try {
-        const result = await _contract?.placeItemOnSale(
-          tokenId,
-          ethers.utils.parseEther(price.toString()),
-          {
-            value: ethers.utils.parseEther("0.025"),
-          }
-        );
-        await result?.wait();
+    const listItems = useCallback(
+      async (tokenId: number, price: number) => {
+        try {
+          const result = await _contract?.placeItemOnSale(
+            tokenId,
+            ethers.utils.parseEther(price.toString()),
+            {
+              value: ethers.utils.parseEther("0.025"),
+            }
+          );
+          await result?.wait();
 
-        alert("Item has been listed to sale");
-      } catch (error: any) {
-        console.error(error.message);
-      }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [_contract]);
+          alert("Item has been listed to sale");
+        } catch (error: any) {
+          console.error(error.message);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      },
+      [_contract]
+    );
 
     return {
       ...swr,

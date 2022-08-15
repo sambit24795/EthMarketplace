@@ -1,7 +1,14 @@
 import { Session } from "next-iron-session";
 import { v4 as uuidV4 } from "uuid";
 import { NextApiRequest, NextApiResponse } from "next";
-import { withSession, contractAddress, addressCheck } from "./utils";
+import {
+  withSession,
+  contractAddress,
+  addressCheck,
+  pinataApiKey,
+  pinataSecretApiKey,
+} from "./utils";
+import axios from "axios";
 
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
@@ -28,7 +35,23 @@ export default withSession(
 
         await addressCheck(req, res);
 
-        return res.status(200).send({ message: "Item has been created" });
+        const pinataRes = await axios.post(
+          "https://api.pinata.cloud/pinning/pinJSONToIPFS",
+          {
+            pinataMetadata: {
+              name: uuidV4(),
+            },
+            pinataContent: item,
+          },
+          {
+            headers: {
+              pinata_api_key: pinataApiKey,
+              pinata_secret_api_key: pinataSecretApiKey,
+            },
+          }
+        );
+
+        return res.status(200).send(pinataRes.data);
       } catch (error) {
         res.status(422).send({ message: "cannot create json" });
       }

@@ -26,7 +26,12 @@ export const hookFactory: ListedItemsHookFactory =
           const tokenURI = await contract!.tokenURI(item.tokenId);
           const owner = await contract!.ownerOf(item.tokenId);
           const metaRes = await fetch(tokenURI);
-          const meta = await metaRes.json();
+          const itemData = await metaRes.json();
+          const meta = {
+            ...itemData,
+            rupee_price: itemData.rPrice,
+            eth_price: itemData.price,
+          };
 
           items.push({
             price: parseFloat(ethers.utils.formatEther(item.price)),
@@ -34,28 +39,31 @@ export const hookFactory: ListedItemsHookFactory =
             creator: item.creator,
             isListed: item.isListed,
             meta,
-            owner
+            owner,
           });
         }
 
         return items;
       }
     );
-      
-    const _contract = contract;
-    const buyItem = useCallback(async (tokenId: number, value: number) => {
-      try {
-        const result = await _contract?.buyItem(tokenId, {
-          value: ethers.utils.parseEther(value.toString()),
-        });
-        await result?.wait();
 
-        alert("You have bought the Item");
-      } catch (error: any) {
-        console.error(error.message);
-      }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [_contract]);
+    const _contract = contract;
+    const buyItem = useCallback(
+      async (tokenId: number, value: number) => {
+        try {
+          const result = await _contract?.buyItem(tokenId, {
+            value: ethers.utils.parseEther(value.toString()),
+          });
+          await result?.wait();
+
+          alert("You have bought the Item");
+        } catch (error: any) {
+          console.error(error.message);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      },
+      [_contract]
+    );
 
     return {
       ...swr,
