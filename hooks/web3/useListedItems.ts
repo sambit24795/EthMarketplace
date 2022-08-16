@@ -5,7 +5,7 @@ import { Item } from "../../types/Item";
 import { useCallback } from "react";
 
 type UseListedItemsResponse = {
-  buyItem: (token: number, value: number) => Promise<void>;
+  buyItem: (token: number, value: string) => Promise<void>;
 };
 
 type ListedItemsHookFactory = CryptoHookFactory<Item[], UseListedItemsResponse>;
@@ -34,7 +34,7 @@ export const hookFactory: ListedItemsHookFactory =
           };
 
           items.push({
-            price: parseFloat(ethers.utils.formatEther(item.price)),
+            price: ethers.utils.formatEther(item.price),
             tokenId: item.tokenId.toNumber(),
             creator: item.creator,
             isListed: item.isListed,
@@ -49,14 +49,12 @@ export const hookFactory: ListedItemsHookFactory =
 
     const _contract = contract;
     const buyItem = useCallback(
-      async (tokenId: number, value: number) => {
+      async (tokenId: number, value: string) => {
         try {
           const result = await _contract?.buyItem(tokenId, {
-            value: ethers.utils.parseEther(value.toString()),
+            value: ethers.utils.parseEther(value),
           });
           await result?.wait();
-
-          alert("You have bought the Item");
         } catch (error: any) {
           console.error(error.message);
         }

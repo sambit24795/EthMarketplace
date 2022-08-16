@@ -15,12 +15,26 @@ const Card: FunctionComponent<CardProps> = ({ item }) => {
     ownedData: { listItems },
   } = useOwneditems();
   const {
-    account: { data },
+    account: { data, isInstalled, connect },
   } = useAccount();
 
   const isItemOwnedByCreator = data?.address === item?.owner;
+  const isLoggedIn = !!data?.address;
+
+  const connectHandler = () => {
+    if (isInstalled) {
+      connect();
+    } else {
+      window.open("https://metamask.io", "_blank");
+    }
+  };
 
   const actionHandler = async () => {
+    if (!isLoggedIn) {
+      connectHandler();
+      return;
+    }
+
     if (isItemOwnedByCreator) {
       await listItems(item.tokenId, item.price);
     } else {
@@ -53,7 +67,11 @@ const Card: FunctionComponent<CardProps> = ({ item }) => {
         <p>{item.meta.description}</p>
         <div className="py-1 card-actions">
           <button className="btn btn-primary" onClick={actionHandler}>
-            {isItemOwnedByCreator ? "Sale Item" : "Buy Item"}
+            {!isLoggedIn
+              ? "Preview"
+              : isItemOwnedByCreator
+              ? "Sale Item"
+              : "Buy Item"}
           </button>
         </div>
       </div>

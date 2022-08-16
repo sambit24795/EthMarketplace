@@ -5,7 +5,7 @@ import { CryptoHookFactory } from "../../types/hooks";
 import { Item } from "../../types/Item";
 
 type UseOwnedItemsResponse = {
-  listItems: (tokenId: number, price: number) => Promise<void>;
+  listItems: (tokenId: number, price: string) => Promise<void>;
 };
 
 type OwnedItemsHookFactory = CryptoHookFactory<Item[], UseOwnedItemsResponse>;
@@ -20,11 +20,13 @@ export const hookFactory: OwnedItemsHookFactory =
       async () => {
         const items: Item[] = [];
         const coreItems = await contract!.getOwnedItems();
+        const tokenUrls = [];
 
         for (let i = 0; i < coreItems.length; i++) {
           const item = coreItems[i];
           const tokenURI = await contract!.tokenURI(item.tokenId);
           const owner = await contract!.ownerOf(item.tokenId);
+          tokenUrls.push(tokenURI);
           const metaRes = await fetch(tokenURI);
           const itemData = await metaRes.json();
           const meta = {
@@ -34,7 +36,7 @@ export const hookFactory: OwnedItemsHookFactory =
           };
 
           items.push({
-            price: parseFloat(ethers.utils.formatEther(item.price)),
+            price: ethers.utils.formatEther(item.price),
             tokenId: item.tokenId.toNumber(),
             creator: item.creator,
             isListed: item.isListed,
@@ -49,18 +51,16 @@ export const hookFactory: OwnedItemsHookFactory =
 
     const _contract = contract;
     const listItems = useCallback(
-      async (tokenId: number, price: number) => {
+      async (tokenId: number, price: string) => {
         try {
           const result = await _contract?.placeItemOnSale(
             tokenId,
-            ethers.utils.parseEther(price.toString()),
+            ethers.utils.parseEther(price),
             {
               value: ethers.utils.parseEther("0.025"),
             }
           );
           await result?.wait();
-
-          alert("Item has been listed to sale");
         } catch (error: any) {
           console.error(error.message);
         }

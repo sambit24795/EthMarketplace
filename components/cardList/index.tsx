@@ -10,7 +10,7 @@ const CardList: FunctionComponent<CardListProps> = ({ items }) => {
   return (
     <>
       {items.map((item) => (
-        <Card key={item.meta.id} item={item} />
+        <Card key={item.meta.image} item={item} />
       ))}
     </>
   );

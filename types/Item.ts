@@ -9,7 +9,7 @@ export interface ItemMeta {
 
 export interface ItemCore {
   tokenId: number;
-  price: number;
+  price: string;
   creator: string;
   isListed: boolean;
 }
